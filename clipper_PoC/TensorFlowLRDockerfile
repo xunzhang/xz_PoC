@@ -1,0 +1,16 @@
+FROM clipper/py-rpc:09dfc97
+
+USER root
+
+COPY python_container_conda_deps.txt /lib/
+
+RUN conda config --set ssl_verify no \
+  && conda install -c anaconda cloudpickle=0.5.2 \
+  && conda install -y --file /lib/python_container_conda_deps.txt \
+  && conda install tensorflow
+
+COPY tf_lr_container.py tf_lr_container_entry.sh /container/
+
+CMD ["/container/tf_lr_container_entry.sh"]
+
+# vim: set filetype=dockerfile:
